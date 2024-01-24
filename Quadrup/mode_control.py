@@ -1,15 +1,29 @@
+from PyQt5.QtCore import QThread
 
-class mode_control:
+class mode_control(QThread):
     def __init__(self,monitor):
-        self.mode_list = ['Manual','Trot']
+        super().__init__()
+        self.mode_list = ['Trot']
         self.monitor = monitor
+        self.pre_d_joint = self.monitor.take_d_joint()
     
     def action(self,mode):
-        if mode == "Manual":
-            self.__manual()
+        self.mode = mode
+        self.start()
+        
+    def run(self):
+        while self.monitor.mode_state == 1:
+            if self.mode == "Manual":
+                self.__manual()
 
     def __manual(self):
-        while self.monitor.mode_state == 1:
-            # data = self.monitor.read_data()
-            print([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
-            self.monitor.update_state([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+        data = self.monitor.read_data()
+        self.monitor.update_state(data)
+        print(self.monitor.take_d_joint())
+        cur_d_joint = self.monitor.take_d_joint()
+        if self.pre_d_joint == cur_d_joint:
+            self.monitor.send_data(cur_d_joint)
+        
+        self.pre_d_joint = cur_d_joint
+        # self.monitor.show()
+        self.quit()

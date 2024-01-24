@@ -17,17 +17,16 @@ class Monitor(QWidget):
                 self.d_joint[j+i*3].setMaximum(45)
                 self.d_joint[j+i*3].setGeometry(12+147*i,54+50*j,135,20)
                 self.d_joint[j+i*3].setOrientation(Qt.Horizontal)
-                # self.d_joint[j+i*3].valueChanged.connect(lambda value: self.updateLabel(value, index = i+j*3))
 
                 self.a_joint.append(QtWidgets.QLabel(self))
                 self.a_joint[j+i*3].setGeometry(107+147*i,30+50*j,40,20)
                 self.a_joint[j+i*3].setText('0')
                 self.a_joint[j+i*3].setAlignment(Qt.AlignRight)
 
-                # self.d_joint_label.append(QtWidgets.QLabel(self))
-                # self.d_joint_label[j+i*3].setGeometry(67+147*i,30+50*j,40,20)
-                # self.d_joint_label[j+i*3].setText(str(self.d_joint[j+i*3].value()))
-                # self.d_joint_label[j+i*3].setAlignment(Qt.AlignRight)
+                self.d_joint_label.append(QtWidgets.QLabel(self))
+                self.d_joint_label[j+i*3].setGeometry(67+147*i,30+50*j,40,20)
+                self.d_joint_label[j+i*3].setText(str(self.d_joint[j+i*3].value()))
+                self.d_joint_label[j+i*3].setAlignment(Qt.AlignRight)
 
                 leg_label = QtWidgets.QLabel(self)
                 leg_label.setGeometry(12+147*i,30+50*j,50,20)
@@ -90,10 +89,6 @@ class Monitor(QWidget):
         self.Yaw.setGeometry(508,252,80,20)
         self.Yaw.setAlignment(Qt.AlignRight)
         
-    def updateLabel(self, value, index):
-        self.d_joint_label[index].setText(str(value))
-
-
 
 #test script
 # app = QApplication(sys.argv)
