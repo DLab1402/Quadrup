@@ -24,10 +24,8 @@ class qua_speak(Peripheral):
     def __convert_to_bytes(self,number):		
         byte_array = []		
         for n in number:	
-            tem = (n+90).to_bytes(2,byteorder = 'big')		
-            byte_array.append(tem[1])		
-            byte_array.append(tem[0])			
-        return bytes(byte_array)
+            byte_array.extend((n+90).to_bytes(2,byteorder = 'little'))		
+        return byte_array
 
     def __invert_to_real(self,state):
         result = []
@@ -42,7 +40,15 @@ class qua_speak(Peripheral):
         return result
 	
     def send(self,angle):
-        self.__data.write(bytes(self.__convert_to_bytes(angle)))	
+        angle01 = [12]
+        angle01.extend(angle[0:6])
+        angle01.extend([12])
+        angle02 = [24]
+        angle02.extend(angle[6:12])
+        angle02.extend([24])
+        print(angle01)
+        self.__data.write(bytes(self.__convert_to_bytes(angle01)))
+        self.__data.write(bytes(self.__convert_to_bytes(angle02)))
 
     def read(self):
         result = self.__invert_to_real(self.__data.read())
@@ -52,14 +58,15 @@ class qua_speak(Peripheral):
 if __name__ == "__main__":		
     import time		
     cHM10 = qua_speak("b8:d6:1a:be:a4:62")
-    cHM10.connect()
-    angle1 = [0,0,0,0,0,0,0,0,0,0,0,0]		
-    angle2 = [30,30,30,30,30,30,30,30,30,30,30,30,30,30]		
+    ISCo = cHM10.connect()
+    print(ISCo)
+    angle1 = [1,2,3,4,5,6,7,8,9,10,11,12]		
+    # angle2 = [100,30,30,30,30,30,30]		
 		
     while True:		
-        tem = cHM10.read()		
-        print(tem)		
-        cHM10.send(angle2)				
+        # tem = cHM10.read()		
+        # print(tem)		
+        # cHM10.send(angle1)				
         # time.sleep(3.0)		
-        # cHM10.send(angle2)			
+        cHM10.send(angle1)			
         time.sleep(3.0)		
