@@ -5,8 +5,9 @@ class leg:
         self.__l3 = l3
 
     def forward(self,alpha,beta,lamda):
-        self.elbow = np.dot(self.__T01(alpha), self.__T12(beta,self.__l2))
-        self.paw = np.dot(self.elbow,np.array([self.l3*np.cos(lamda),self.__l3*np.sin(lamda),0,1]))
+        base = np.dot(self.__T01(alpha), self.__T12(beta,self.__l2))
+        self.elbow = np.dot(base, [0,0,0,1])
+        self.paw = np.dot(base,np.array([self.__l3*np.cos(lamda),self.__l3*np.sin(lamda),0,1]))
         x = self.paw[0]
         y = self.paw[1]
         z = self.paw[2]
@@ -34,5 +35,5 @@ class leg:
         return T
 
 #Test script
-# a = one_leg(1,1)
+# a = leg(1,1)
 # print(a.forward(-3.14/2,0,0))
